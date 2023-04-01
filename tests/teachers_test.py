@@ -1,4 +1,7 @@
 def test_get_assignments_teacher_1(client, h_teacher_1):
+    """
+    failure case: assignments dont belong to teacher 1 and/or state is not submitted 
+    """
     response = client.get(
         '/teacher/assignments',
         headers=h_teacher_1
@@ -13,6 +16,9 @@ def test_get_assignments_teacher_1(client, h_teacher_1):
 
 
 def test_get_assignments_teacher_2(client, h_teacher_2):
+    """
+    failure case: assignments dont belong to teacher 2 and/or state is not submitted 
+    """
     response = client.get(
         '/teacher/assignments',
         headers=h_teacher_2
@@ -24,6 +30,24 @@ def test_get_assignments_teacher_2(client, h_teacher_2):
     for assignment in data:
         assert assignment['teacher_id'] == 2
         assert assignment['state'] == 'SUBMITTED'
+
+def test_grade_assignment_teacher_2(client, h_teacher_2):
+    """
+    failure case: assignment 2 is not assigned grade A or assignment state is not GRADED 
+    """
+    response = client.post(
+        '/teacher/assignments/grade', 
+        headers=h_teacher_2,
+        json={
+            "id": 2,
+            "grade": "A"
+        }
+    )
+
+    assert response.status_code == 200
+    data = response.json['data']
+    assert data['grade'] == "A"
+    assert data['state'] == "GRADED"
 
 
 def test_grade_assignment_cross(client, h_teacher_2):
