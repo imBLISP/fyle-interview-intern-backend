@@ -91,7 +91,7 @@ def test_submit_assignment_student_1(client, h_student_1):
     assert data['teacher_id'] == 2
 
 
-def test_assingment_resubmitt_error(client, h_student_1):
+def test_assignment_resubmit_error(client, h_student_1):
     """
     failure case: assignment is already submitted or graded
     """
